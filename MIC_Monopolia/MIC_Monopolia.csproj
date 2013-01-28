@@ -1,0 +1,323 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProductVersion>9.0.21022</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{B9EC9541-D51C-4439-8DD5-2BDFC941B321}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>MIC_Monopolia</RootNamespace>
+    <AssemblyName>MIC_Monopolia</AssemblyName>
+    <TargetFrameworkVersion>v3.5</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+    <FileUpgradeFlags>
+    </FileUpgradeFlags>
+    <UpgradeBackupLocation>
+    </UpgradeBackupLocation>
+    <OldToolsVersion>3.5</OldToolsVersion>
+    <PublishUrl>опубликовать\</PublishUrl>
+    <Install>true</Install>
+    <InstallFrom>Disk</InstallFrom>
+    <UpdateEnabled>false</UpdateEnabled>
+    <UpdateMode>Foreground</UpdateMode>
+    <UpdateInterval>7</UpdateInterval>
+    <UpdateIntervalUnits>Days</UpdateIntervalUnits>
+    <UpdatePeriodically>false</UpdatePeriodically>
+    <UpdateRequired>false</UpdateRequired>
+    <MapFileExtensions>true</MapFileExtensions>
+    <ApplicationRevision>0</ApplicationRevision>
+    <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
+    <UseApplicationTrust>false</UseApplicationTrust>
+    <BootstrapperEnabled>true</BootstrapperEnabled>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System" />
+    <Reference Include="System.Core">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Xml.Linq">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data.DataSetExtensions">
+      <RequiredTargetFramework>3.5</RequiredTargetFramework>
+    </Reference>
+    <Reference Include="System.Data" />
+    <Reference Include="System.Deployment" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="ChanceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ChanceForm.Designer.cs">
+      <DependentUpon>ChanceForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Controls\OpacityTableLayoutPanel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\PerformButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GameItems\Chip.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ConstControls.cs" />
+    <Compile Include="Controls\AppButton.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Controls\ImprovedLabel.cs">
+    </Compile>
+    <Compile Include="GameItems\Cell.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GameItems\Dice.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="GameItems\Game.cs" />
+    <Compile Include="GameItems\Rules.cs" />
+    <Compile Include="MainField.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MainField.Designer.cs">
+      <DependentUpon>MainField.cs</DependentUpon>
+    </Compile>
+    <Compile Include="MetroForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="MetroForm.designer.cs">
+      <DependentUpon>MetroForm.cs</DependentUpon>
+    </Compile>
+    <Compile Include="GameItems\Player.cs" />
+    <Compile Include="Controls\OpacityLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+    <EmbeddedResource Include="ChanceForm.resx">
+      <DependentUpon>ChanceForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="MainField.resx">
+      <DependentUpon>MainField.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+    </Compile>
+    <None Include="Properties\Settings.settings">
+      <Generator>SettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
+    </None>
+    <Compile Include="Properties\Settings.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+    </Compile>
+    <Compile Include="RealObject.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1 Client Profile</ProductName>
+      <Install>false</Install>
+    </BootstrapperPackage>
+    <BootstrapperPackage Include="Microsoft.Net.Framework.3.5.SP1">
+      <Visible>False</Visible>
+      <ProductName>.NET Framework 3.5 SP1</ProductName>
+      <Install>true</Install>
+    </BootstrapperPackage>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\zur0.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Департамент по молодёжной политике.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\51245 - копия - копия.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sms_zapret.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\obnovlyat-sayt-260x260.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nalogovaya.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\2080-den goroda novoulianovska.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\aam-2012-rabota-2.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\x_9dd4aa0a.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\21.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Герб Ульяновской области.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tanec-fleshmob-542x407.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Эмблема МИЦ.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Рисунок1.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\14579049-black-and-white-contour-photo-camera-vector--illustration.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\15039328-stack-of-money.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dices.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo_square.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Plan.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\pravo.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Рисунок1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\l_85584f6f.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\barretr_Earth.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\x_3b02010e.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5454.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\area.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\brendbook.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\chance.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\comandirovka.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\departament.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\dialog.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\findrising.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\flashmob.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fns.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\foto.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\information.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\it.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\leader.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\logo.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\master.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\meeting.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\office.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\press.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\profile.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\request.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\rubyonrails.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\sms.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\tarif.gif" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\updatesite.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\presentation.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\good.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\МИЦ Обложка.png" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+       Other similar extension points exist, see Microsoft.Common.targets.
+  <Target Name="BeforeBuild">
+  </Target>
+  <Target Name="AfterBuild">
+  </Target>
+  -->
+</Project>
