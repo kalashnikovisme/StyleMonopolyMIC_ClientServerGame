@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using GameItems;
 using UsefulControls;
 using Controls;
+using ClientNameSpace;
 
 namespace MIC_Monopolia {
 	public partial class MainField : Form {
@@ -52,6 +53,8 @@ namespace MIC_Monopolia {
 		#region Create Field
 
 		public MainField(int playCellsCount, int playersCount) {
+			initClient();
+
 			cells = new Cell[playCellsCount];
 			namePlayersDisTextBox = new ImprovedLabel[playersCount];
 			moneyPlayersLabel = new OpacityLabel[playersCount];
@@ -594,6 +597,14 @@ namespace MIC_Monopolia {
 					cells[i].BackgroundImage = global::MIC_Monopolia.Properties.Resources.it;
 				}
 			}
+		}
+
+		#endregion
+
+		#region ClientNameSpace
+
+		private void initClient() {
+			Client client = new Client();
 		}
 
 		#endregion

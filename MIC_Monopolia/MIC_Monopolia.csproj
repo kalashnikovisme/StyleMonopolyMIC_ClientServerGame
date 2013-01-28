@@ -17,6 +17,7 @@
     <UpgradeBackupLocation>
     </UpgradeBackupLocation>
     <OldToolsVersion>3.5</OldToolsVersion>
+    <IsWebBootstrapper>false</IsWebBootstrapper>
     <PublishUrl>опубликовать\</PublishUrl>
     <Install>true</Install>
     <InstallFrom>Disk</InstallFrom>
@@ -29,7 +30,6 @@
     <MapFileExtensions>true</MapFileExtensions>
     <ApplicationRevision>0</ApplicationRevision>
     <ApplicationVersion>1.0.0.%2a</ApplicationVersion>
-    <IsWebBootstrapper>false</IsWebBootstrapper>
     <UseApplicationTrust>false</UseApplicationTrust>
     <BootstrapperEnabled>true</BootstrapperEnabled>
   </PropertyGroup>
@@ -76,6 +76,7 @@
     <Compile Include="ChanceForm.Designer.cs">
       <DependentUpon>ChanceForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="Client\Client.cs" />
     <Compile Include="Controls\OpacityTableLayoutPanel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -105,15 +106,15 @@
     <Compile Include="MainField.Designer.cs">
       <DependentUpon>MainField.cs</DependentUpon>
     </Compile>
+    <Compile Include="GameItems\Player.cs" />
+    <Compile Include="Controls\OpacityLabel.cs">
+      <SubType>Component</SubType>
+    </Compile>
     <Compile Include="MetroForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Include="MetroForm.designer.cs">
       <DependentUpon>MetroForm.cs</DependentUpon>
-    </Compile>
-    <Compile Include="GameItems\Player.cs" />
-    <Compile Include="Controls\OpacityLabel.cs">
-      <SubType>Component</SubType>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -314,6 +315,7 @@
   <ItemGroup>
     <None Include="Resources\МИЦ Обложка.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
