@@ -43,6 +43,8 @@ namespace MIC_Monopolia {
 		private Game game;
 		private bool isGame = false;
 
+		private Client client;
+
 		//private Color[] orderColor = new Color[] { Color.Red, 
 		//	Color.Black, Color.Green, Color.Blue, Color.Yellow, Color.Brown, Color.Coral, Color.Orange, 
 		//	Color.Purple, Color.Gray 
@@ -69,7 +71,6 @@ namespace MIC_Monopolia {
 			cubesPanel = new OpacityTableLayoutPanel();
 			taskTableLayoutPanel = new OpacityTableLayoutPanel();
 			players = new Player[playersCount];
-
 			InitializeComponent();
 			this.Font = new Font("PF Beausans Pro Light", 12F, FontStyle.Bold);
 
@@ -368,12 +369,7 @@ namespace MIC_Monopolia {
 				game.PlayerBankKrupt += game_playerBankKrupt;
 				game.NewFormIsOpen += game_NewFormIsOpen;
 				isGame = true;
-				players[0].Money = 260;
-				players[0].People = 10;
-				players[0].Famous = 40;
-				players[1].Money = -15;
-				players[1].People = 115;
-				players[1].Famous = 120;
+				sendDataAboutPlayer(players[0]);
 			}
 			game.NextMove(sumPointsOfDices());
 			game.CheckCell(cells[game.PlayersPositions[game.CurrentPlayerIndex]].Task);
@@ -604,7 +600,13 @@ namespace MIC_Monopolia {
 		#region ClientNameSpace
 
 		private void initClient() {
-			Client client = new Client();
+			client = new Client();
+			client.ConnectAsync("127.0.0.1", 4505);
+			client.SendAsync("yes");
+		}
+
+		private void sendDataAboutPlayer(Player player) {
+			
 		}
 
 		#endregion

@@ -26,7 +26,8 @@
 			this.dataGridView1 = new System.Windows.Forms.DataGridView();
 			this.Name = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.Position = new System.Windows.Forms.DataGridViewTextBoxColumn();
-			this.label1 = new System.Windows.Forms.Label();
+			this.serverInfoLabel = new System.Windows.Forms.Label();
+			this.gameCountLabel = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -51,21 +52,31 @@
 			this.Position.HeaderText = "Position";
 			this.Position.Name = "Position";
 			// 
-			// label1
+			// serverInfoLabel
 			// 
-			this.label1.AutoSize = true;
-			this.label1.Location = new System.Drawing.Point(12, 354);
-			this.label1.Name = "label1";
-			this.label1.Size = new System.Drawing.Size(70, 13);
-			this.label1.TabIndex = 1;
-			this.label1.Text = "Игроков нет";
+			this.serverInfoLabel.AutoSize = true;
+			this.serverInfoLabel.Location = new System.Drawing.Point(12, 354);
+			this.serverInfoLabel.Name = "serverInfoLabel";
+			this.serverInfoLabel.Size = new System.Drawing.Size(70, 13);
+			this.serverInfoLabel.TabIndex = 1;
+			this.serverInfoLabel.Text = "Игроков нет";
+			// 
+			// gameCountLabel
+			// 
+			this.gameCountLabel.AutoSize = true;
+			this.gameCountLabel.Location = new System.Drawing.Point(88, 354);
+			this.gameCountLabel.Name = "gameCountLabel";
+			this.gameCountLabel.Size = new System.Drawing.Size(70, 13);
+			this.gameCountLabel.TabIndex = 2;
+			this.gameCountLabel.Text = "Игроков нет";
 			// 
 			// ServerUI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(426, 386);
-			this.Controls.Add(this.label1);
+			this.Controls.Add(this.gameCountLabel);
+			this.Controls.Add(this.serverInfoLabel);
 			this.Controls.Add(this.dataGridView1);
 			this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedSingle;
 			this.MaximizeBox = false;
@@ -82,7 +93,8 @@
 		private System.Windows.Forms.DataGridView dataGridView1;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Name;
 		private System.Windows.Forms.DataGridViewTextBoxColumn Position;
-		private System.Windows.Forms.Label label1;
+		private System.Windows.Forms.Label serverInfoLabel;
+		private System.Windows.Forms.Label gameCountLabel;
 	}
 }
 

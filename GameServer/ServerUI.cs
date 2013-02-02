@@ -13,12 +13,31 @@ namespace GameServer {
 			InitializeComponent();
 			this.Show();
 			Server server = new Server();
-			server.ClientConnected += new Server.ClientConnectedEventHandler(server_ClientConnected);
-			server.Init();
+			server.ServerStarted += new Server.ServerStartedEventHandler(server_ServerStarted);
+			server.ConnectClientsCountChanged += new Server.ConnectedClientsCountChangedEventHandler(server_ConnectClientsCountChanged);
+			server.Start(4505);
+		}
+
+		private void server_ConnectClientsCountChanged(int count) {
+			if (gameCountLabel.InvokeRequired) {
+				SetLabelTextDelegate labelTextDelegate = new SetLabelTextDelegate(SetLabelTextCallBack);
+				gameCountLabel.Invoke(labelTextDelegate, gameCountLabel, "Количество игроков " + count.ToString());
+			} else {
+				gameCountLabel.Text = "Количество игроков " + count.ToString();
+			}
+		}
+
+		private void server_ServerStarted() {
+			serverInfoLabel.Text = "Сервер запущен";
 		}
 
 		private void server_ClientConnected() {
-			label1.Text = "Игрок подключился";
+			serverInfoLabel.Text = "Игрок подключился";
+		}
+
+		private delegate void SetLabelTextDelegate(ref Label label, string message);
+		private void SetLabelTextCallBack(ref Label label, string message) {
+			label.Text = message;
 		}
 	}
 }
