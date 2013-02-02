@@ -51,9 +51,9 @@ namespace ClientNameSpace {
 		}
 
 		private void ReceiveAsync(SocketAsyncEventArgs e) {
-			bool willRaiseEvent = Sock.ReceiveAsync(e);
-			if (!willRaiseEvent)
+			if (Sock.ReceiveAsync(e) == false) {
 				ProcessReceive(e);
+			}
 		}
 
 		void SockAsyncArgs_Completed(object sender, SocketAsyncEventArgs e) {

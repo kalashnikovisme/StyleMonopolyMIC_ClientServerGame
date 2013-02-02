@@ -28,6 +28,7 @@
 			this.Position = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.serverInfoLabel = new System.Windows.Forms.Label();
 			this.gameCountLabel = new System.Windows.Forms.Label();
+			this.serverMessageLabel = new System.Windows.Forms.Label();
 			((System.ComponentModel.ISupportInitialize)(this.dataGridView1)).BeginInit();
 			this.SuspendLayout();
 			// 
@@ -64,17 +65,27 @@
 			// gameCountLabel
 			// 
 			this.gameCountLabel.AutoSize = true;
-			this.gameCountLabel.Location = new System.Drawing.Point(88, 354);
+			this.gameCountLabel.Location = new System.Drawing.Point(175, 354);
 			this.gameCountLabel.Name = "gameCountLabel";
 			this.gameCountLabel.Size = new System.Drawing.Size(70, 13);
 			this.gameCountLabel.TabIndex = 2;
 			this.gameCountLabel.Text = "Игроков нет";
+			// 
+			// serverMessageLabel
+			// 
+			this.serverMessageLabel.AutoSize = true;
+			this.serverMessageLabel.Location = new System.Drawing.Point(341, 354);
+			this.serverMessageLabel.Name = "serverMessageLabel";
+			this.serverMessageLabel.Size = new System.Drawing.Size(70, 13);
+			this.serverMessageLabel.TabIndex = 3;
+			this.serverMessageLabel.Text = "Игроков нет";
 			// 
 			// ServerUI
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
 			this.ClientSize = new System.Drawing.Size(426, 386);
+			this.Controls.Add(this.serverMessageLabel);
 			this.Controls.Add(this.gameCountLabel);
 			this.Controls.Add(this.serverInfoLabel);
 			this.Controls.Add(this.dataGridView1);
@@ -95,6 +106,7 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn Position;
 		private System.Windows.Forms.Label serverInfoLabel;
 		private System.Windows.Forms.Label gameCountLabel;
+		private System.Windows.Forms.Label serverMessageLabel;
 	}
 }
 

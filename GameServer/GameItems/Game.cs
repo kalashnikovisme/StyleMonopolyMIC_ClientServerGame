@@ -117,8 +117,8 @@ namespace GameItems {
 		//public event EventHandler ChanceFormClosed;
 
 		//private void chance_FormClosing(object sender, System.Windows.Forms.FormClosingEventArgs e) {
-		//    string data = System.IO.File.ReadAllLines(@"chance.txt", System.Text.Encoding.Default)[((ChanceForm)sender).ChosenIndex];
-		//    int[] points = new int[] { Int32.Parse(data.Split('\t')[1]), Int32.Parse(data.Split('\t')[2]), Int32.Parse(data.Split('\t')[3]) };
+		//    string command = System.IO.File.ReadAllLines(@"chance.txt", System.Text.Encoding.Default)[((ChanceForm)sender).ChosenIndex];
+		//    int[] points = new int[] { Int32.Parse(command.Split('\t')[1]), Int32.Parse(command.Split('\t')[2]), Int32.Parse(command.Split('\t')[3]) };
 		//    setPointsToPlayers(currentPlayerIndex, points);
 		//    ChanceFormClosed(this, EventArgs.Empty);
 		//}

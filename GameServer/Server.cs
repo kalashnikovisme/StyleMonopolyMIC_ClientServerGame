@@ -8,7 +8,7 @@ using System.IO;
 
 namespace GameServer {
 	public class Server {
-		private const int MAX_PLAYERS = 2;
+		private const int MAX_PLAYERS = 1;
 
 		public delegate void ServerMessagedEventHandler(string message);
 		public event ServerMessagedEventHandler ServerMessaged;
@@ -34,6 +34,7 @@ namespace GameServer {
 				if (ClientConnection.ClientNumber > MAX_PLAYERS) {
 					System.Windows.Forms.MessageBox.Show("Максимальное количество игроков");
 					e.AcceptSocket.Disconnect(true);
+					Client.SendAsync("close");
 					return;
 				}
 				Client.ServerMessaged += new ClientConnection.ServerMessagedEventHandler(Client_ServerMessaged);
@@ -44,13 +45,13 @@ namespace GameServer {
 		}
 
 		private void Client_ServerMessaged(string message) {
-			//ServerMessaged(message);
+			ServerMessaged(message);
 		}
 
 		private void SockAcceptAsync(SocketAsyncEventArgs e) {
-			bool willRaiseEvent = Sock.AcceptAsync(e);
-			if (!willRaiseEvent)
+			if (Sock.AcceptAsync(e) == false) {
 				AcceptCompleted(Sock, e);
+			}
 		}
 
 		public void Start(int Port) {

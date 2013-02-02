@@ -14,8 +14,18 @@ namespace GameServer {
 			this.Show();
 			Server server = new Server();
 			server.ServerStarted += new Server.ServerStartedEventHandler(server_ServerStarted);
+			server.ServerMessaged += new Server.ServerMessagedEventHandler(server_ServerMessaged);
 			server.ConnectClientsCountChanged += new Server.ConnectedClientsCountChangedEventHandler(server_ConnectClientsCountChanged);
 			server.Start(4505);
+		}
+
+		private void server_ServerMessaged(string message) {
+			if (serverMessageLabel.InvokeRequired) {
+				SetLabelTextDelegate labelTextDelegate = new SetLabelTextDelegate(SetLabelTextCallBack);
+				serverMessageLabel.Invoke(labelTextDelegate, gameCountLabel, message);
+			} else {
+				serverMessageLabel.Text = message;
+			}
 		}
 
 		private void server_ConnectClientsCountChanged(int count) {

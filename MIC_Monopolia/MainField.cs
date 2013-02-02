@@ -79,6 +79,8 @@ namespace MIC_Monopolia {
 			putImageInCells();
 
 			this.Paint += MainField_Paint;
+
+			sendCreateFieldCompleted();			
 		}
 
 		private void MainField_Paint(object sender, PaintEventArgs e) {
@@ -602,11 +604,19 @@ namespace MIC_Monopolia {
 		private void initClient() {
 			client = new Client();
 			client.ConnectAsync("127.0.0.1", 4505);
-			client.SendAsync("yes");
+			client.ClientMessaged += new Client.ClientMessagedEventHandler(client_ClientMessaged);
+		}
+
+		private void client_ClientMessaged(string message) {
+			
 		}
 
 		private void sendDataAboutPlayer(Player player) {
 			
+		}
+
+		private void sendCreateFieldCompleted() {
+			client.SendAsync("SendCreateComplete");
 		}
 
 		#endregion

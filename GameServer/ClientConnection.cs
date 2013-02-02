@@ -56,7 +56,7 @@ namespace GameServer {
 				ProcessReceive(e);
 		}
 
-		private void SendAsync(string data) {
+		public void SendAsync(string data) {
 			byte[] buff = Encoding.UTF8.GetBytes(data);
 			SocketAsyncEventArgs e = new SocketAsyncEventArgs();
 			e.Completed += SockAsyncEventArgs_Completed;
