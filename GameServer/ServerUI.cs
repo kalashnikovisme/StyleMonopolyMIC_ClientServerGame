@@ -22,7 +22,7 @@ namespace GameServer {
 		private void server_ServerMessaged(string message) {
 			if (serverMessageLabel.InvokeRequired) {
 				SetLabelTextDelegate labelTextDelegate = new SetLabelTextDelegate(SetLabelTextCallBack);
-				serverMessageLabel.Invoke(labelTextDelegate, gameCountLabel, message);
+				serverMessageLabel.Invoke(labelTextDelegate, serverMessageLabel, message);
 			} else {
 				serverMessageLabel.Text = message;
 			}

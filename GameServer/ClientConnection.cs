@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Net.Sockets;
+using GameItems;
 
 namespace GameServer {
 	class ClientConnection {
@@ -63,6 +64,15 @@ namespace GameServer {
 			e.SetBuffer(buff, 0, buff.Length);
 			SendAsync(e);
 		}
+
+		public void SendAsync(Player gamePlayer) {
+			byte[] buff = Encoding.UTF8.GetBytes(gamePlayer.ToString());
+			SocketAsyncEventArgs e = new SocketAsyncEventArgs();
+			e.Completed += new EventHandler<SocketAsyncEventArgs>(SockAsyncEventArgs_Completed);
+			e.SetBuffer(buff, 0, buff.Length);
+			SendAsync(e);
+		}
+
 		private void SendAsync(SocketAsyncEventArgs e) {
 			bool willRaiseEvent = Sock.SendAsync(e);
 			if (!willRaiseEvent)

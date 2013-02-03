@@ -6,16 +6,7 @@ using UsefulClasses;
 
 namespace GameItems {
 	public class Player : RealObject {
-		private int money = 0;
-		public int Money {
-			get {
-				return money;
-			}
-			set {
-				money = value;
-			}
-		}
-		
+		public int Money = 0;
 		public int Famous = 0;
 		public int People = 0;
 		
@@ -33,10 +24,12 @@ namespace GameItems {
 				position = value;
 			}
 		}
-		
+
 		public Player(string playerName) {
 			this.Name = playerName;
 		}
+
+		public Player(int playerIndex)
 
 		public bool Lose = false;
 	}

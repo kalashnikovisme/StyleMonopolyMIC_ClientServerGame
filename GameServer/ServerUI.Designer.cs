@@ -36,8 +36,8 @@
 			// 
 			this.dataGridView1.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
 			this.dataGridView1.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-			this.Name,
-			this.Position});
+            this.Name,
+            this.Position});
 			this.dataGridView1.Location = new System.Drawing.Point(15, 19);
 			this.dataGridView1.Name = "dataGridView1";
 			this.dataGridView1.Size = new System.Drawing.Size(396, 332);
@@ -74,7 +74,7 @@
 			// serverMessageLabel
 			// 
 			this.serverMessageLabel.AutoSize = true;
-			this.serverMessageLabel.Location = new System.Drawing.Point(341, 354);
+			this.serverMessageLabel.Location = new System.Drawing.Point(12, 389);
 			this.serverMessageLabel.Name = "serverMessageLabel";
 			this.serverMessageLabel.Size = new System.Drawing.Size(70, 13);
 			this.serverMessageLabel.TabIndex = 3;
@@ -84,7 +84,7 @@
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
 			this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-			this.ClientSize = new System.Drawing.Size(426, 386);
+			this.ClientSize = new System.Drawing.Size(426, 411);
 			this.Controls.Add(this.serverMessageLabel);
 			this.Controls.Add(this.gameCountLabel);
 			this.Controls.Add(this.serverInfoLabel);

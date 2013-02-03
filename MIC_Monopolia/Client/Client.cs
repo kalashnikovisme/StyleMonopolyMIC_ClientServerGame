@@ -8,11 +8,17 @@ using System.IO;
 
 namespace ClientNameSpace {
 	public class Client {
+		private const string CLOSE = "close";
+
 		public delegate void ClientMessagedEventHandler(string message);
 		public event ClientMessagedEventHandler ClientMessaged;
 
+		public delegate void ClientClosedEventHandler();
+		public event ClientClosedEventHandler ClientClosed;
+
 		private Socket Sock;
 		private SocketAsyncEventArgs SockAsyncArgs;
+
 		private byte[] buff;
 
 		public Client() {
@@ -56,7 +62,7 @@ namespace ClientNameSpace {
 			}
 		}
 
-		void SockAsyncArgs_Completed(object sender, SocketAsyncEventArgs e) {
+		private void SockAsyncArgs_Completed(object sender, SocketAsyncEventArgs e) {
 			switch (e.LastOperation) {
 				case SocketAsyncOperation.Connect:
 					ProcessConnect(e);
@@ -81,7 +87,9 @@ namespace ClientNameSpace {
 		private void ProcessReceive(SocketAsyncEventArgs e) {
 			if (e.SocketError == SocketError.Success) {
 				string str = Encoding.UTF8.GetString(e.Buffer, 0, e.BytesTransferred);
-				ClientMessaged("Receive: {0}" + str);
+				if (str == CLOSE) {
+					ClientClosed();
+				}
 			} else {
 				ClientMessaged("Dont recieve");
 			}

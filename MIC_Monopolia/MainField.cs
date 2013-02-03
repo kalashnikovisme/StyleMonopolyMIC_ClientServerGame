@@ -605,6 +605,11 @@ namespace MIC_Monopolia {
 			client = new Client();
 			client.ConnectAsync("127.0.0.1", 4505);
 			client.ClientMessaged += new Client.ClientMessagedEventHandler(client_ClientMessaged);
+			client.ClientClosed += new Client.ClientClosedEventHandler(client_ClientClosed);
+		}
+
+		private void client_ClientClosed() {
+			this.Close();
 		}
 
 		private void client_ClientMessaged(string message) {
