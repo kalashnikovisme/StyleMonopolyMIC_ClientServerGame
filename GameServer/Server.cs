@@ -23,6 +23,7 @@ namespace GameServer {
 
 		private Socket Sock;
 		private SocketAsyncEventArgs AcceptAsyncArgs;
+		private ClientConnection Client;
 
 		public Server() {
 			Sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -32,23 +33,23 @@ namespace GameServer {
 
 		private void AcceptCompleted(object sender, SocketAsyncEventArgs e) {
 			if (e.SocketError == SocketError.Success) {
-				ClientConnection Client = new ClientConnection(e.AcceptSocket);
+				Client = new ClientConnection(e.AcceptSocket);
 				Client.ServerMessaged += new ClientConnection.ServerMessagedEventHandler(Client_ServerMessaged);
-				if (ClientConnection.ClientNumber > MAX_PLAYERS) {
+				ConnectClientsCountChanged(ClientConnection.ClientCount);
+				if (ClientConnection.ClientCount > MAX_PLAYERS) {
 					System.Windows.Forms.MessageBox.Show("Максимальное количество игроков");
 					e.AcceptSocket.Disconnect(true);
 					Client.SendAsync("close");
 					return;
 				}
-				Client.SendAsync(new GameItems.Player());
-				ConnectClientsCountChanged(ClientConnection.ClientNumber);
+				ConnectClientsCountChanged(ClientConnection.ClientCount);
+			} else {
+				return;
 			}
 			e.AcceptSocket = null;
 			SockAcceptAsync(AcceptAsyncArgs);
-		}
-
-		private void Client_ServerMessaged(string message) {
-			ServerMessaged(message);
+			Client = new ClientConnection(e.AcceptSocket);
+			Client.SendAsync(new GameItems.Player(ClientConnection.ClientCount - 1));
 		}
 
 		private void SockAcceptAsync(SocketAsyncEventArgs e) {
@@ -66,6 +67,10 @@ namespace GameServer {
 
 		public void Stop() {
 			Sock.Close();
+		}
+
+		private void Client_ServerMessaged(string message) {
+			ServerMessaged(message);
 		}
 	}
 }

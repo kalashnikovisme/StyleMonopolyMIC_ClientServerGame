@@ -58,6 +58,8 @@
     <Reference Include="System.Core">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq">
       <RequiredTargetFramework>3.5</RequiredTargetFramework>
     </Reference>
@@ -100,6 +102,8 @@
       <SubType>Component</SubType>
     </Compile>
     <Compile Include="GameItems\Game.cs" />
+    <Compile Include="GameItems\Player.cs" />
+    <Compile Include="GameItems\RealObject.cs" />
     <Compile Include="GameItems\Rules.cs" />
     <Compile Include="MainField.cs">
       <SubType>Form</SubType>
@@ -107,7 +111,6 @@
     <Compile Include="MainField.Designer.cs">
       <DependentUpon>MainField.cs</DependentUpon>
     </Compile>
-    <Compile Include="GameItems\Player.cs" />
     <Compile Include="Controls\OpacityLabel.cs">
       <SubType>Component</SubType>
     </Compile>
@@ -147,7 +150,6 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
-    <Compile Include="RealObject.cs" />
   </ItemGroup>
   <ItemGroup>
     <BootstrapperPackage Include="Microsoft.Net.Client.3.5">
@@ -317,7 +319,9 @@
   <ItemGroup>
     <None Include="Resources\МИЦ Обложка.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="JSON\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Net.Sockets;
 using System.Net;
+using System.Runtime.Serialization.Json;
 using System.IO;
 
 namespace ClientNameSpace {
@@ -86,10 +87,12 @@ namespace ClientNameSpace {
 
 		private void ProcessReceive(SocketAsyncEventArgs e) {
 			if (e.SocketError == SocketError.Success) {
-				string str = Encoding.UTF8.GetString(e.Buffer, 0, e.BytesTransferred);
-				if (str == CLOSE) {
-					ClientClosed();
-				}
+				MemoryStream stream = new MemoryStream();
+				DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(GameItems.Player));
+				stream.Write(e.Buffer, 0, e.Buffer.Length);
+				GameItems.Player player = (GameItems.Player)(ser.ReadObject(stream));
+				System.Windows.Forms.MessageBox.Show(player.Index.ToString());
+				//string str = Encoding.UTF8.GetString(e.Buffer, 0, e.BytesTransferred);
 			} else {
 				ClientMessaged("Dont recieve");
 			}

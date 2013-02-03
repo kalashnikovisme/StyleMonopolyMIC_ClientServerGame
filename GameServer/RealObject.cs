@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Runtime.Serialization;
 
 namespace UsefulClasses {
+	[DataContract]
 	abstract public class RealObject {
 		private string name = "";
+		[DataMember]
 		public string Name {
 			get {
 				return name;
@@ -15,6 +17,7 @@ namespace UsefulClasses {
 		}
 
 		private string info = "";
+		[DataMember]
 		public string Info {
 			get {
 				return info;
@@ -22,16 +25,6 @@ namespace UsefulClasses {
 			set {
 				info = value;
 			}
-		}
-
-		private System.Drawing.Image image = null;
-		public System.Drawing.Image Image {
-			get {
-				return image;
-			}
-			set {
-				image = value;
-			}
-		}		
+		}	
 	}
 }

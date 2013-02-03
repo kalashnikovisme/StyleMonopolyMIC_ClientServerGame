@@ -37,6 +37,8 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -50,6 +52,7 @@
     <Compile Include="ClientConnection.cs" />
     <Compile Include="GameItems\Game.cs" />
     <Compile Include="GameItems\Player.cs" />
+    <Compile Include="JSON\JSON_Parse.cs" />
     <Compile Include="RealObject.cs" />
     <Compile Include="Server.cs" />
     <Compile Include="ServerUI.cs">
