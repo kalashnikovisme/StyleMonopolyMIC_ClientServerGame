@@ -72,7 +72,7 @@ namespace MIC_Monopolia {
 
 			putImageInCells();
 
-			this.Paint += MainField_Paint;			
+			this.Paint += MainField_Paint;
 		}
 
 		private void MainField_Paint(object sender, PaintEventArgs e) {

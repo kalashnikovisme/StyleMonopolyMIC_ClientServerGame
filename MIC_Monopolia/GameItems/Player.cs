@@ -33,6 +33,9 @@ namespace GameItems {
 			}
 		}
 
+		public Player() { 
+		}
+
 		public Player(string playerName) {
 			this.Name = playerName;
 		}

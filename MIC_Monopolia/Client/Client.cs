@@ -10,38 +10,52 @@ using System.Net.Sockets;
 using System.Runtime.Serialization.Json;
 using GameItems;
 using System.IO;
+using MIC_Monopolia;
 
 namespace ClientNameSpace {
 	public partial class Client {
-		public Socket clientSocket;
+		public Socket ClientSocket;
 		private byte[] byteData = new byte[1024];
 		private Player mainPlayer;
 		private List<Player> allPlayers;
 
 		public Client() { 
 			/// Инициализировать MainForm
-			initClient();
+			mainPlayer = new Player();
 		}
 
 		public Client(Player inPlayer) {
 			/// Инициализировать MainForm
 			mainPlayer = new Player(inPlayer.Name);
-			initClient();
 		}
 
-		private void initClient() {
+		public string PlayerName {
+			get {
+				return mainPlayer.Name;
+			}
+			set {
+				mainPlayer.Name = value;
+			}
+		}
+
+		public void InitConnection() {
 			string commandToSend = Command.LIST + Command.SEPARATOR;
 			byteData = Encoding.UTF8.GetBytes(commandToSend);
-			clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+			ClientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
 			byteData = new byte[1024];
-			clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
+			ClientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
+
+			allPlayers = new List<Player>();
+
+			MainField main = new MainField(40, allPlayers.Count + 1);
+			main.ShowDialog();
 		}
 
 		private void btnSend_Click(object sender, EventArgs e) {
 			try {
 				string json = "message." + JSON.SerializePlayer(mainPlayer);
 				byte[] byteData = Encoding.UTF8.GetBytes(json);
-				clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+				ClientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
 			} catch (Exception exc) {
 				MessageBox.Show("Unable to send message to the server. Error: " + exc.Message, "SGSclientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -49,7 +63,7 @@ namespace ClientNameSpace {
 
 		private void OnSend(IAsyncResult ar) {
 			try {
-				clientSocket.EndSend(ar);
+				ClientSocket.EndSend(ar);
 			} catch (ObjectDisposedException) { } catch (Exception ex) {
 				MessageBox.Show(ex.Message, "SGSclientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -57,7 +71,7 @@ namespace ClientNameSpace {
 
 		private void OnReceive(IAsyncResult ar) {
 			try {
-				clientSocket.EndReceive(ar);
+				ClientSocket.EndReceive(ar);
 				string json_Datas = Encoding.UTF8.GetString(byteData);
 				string command = JSON.GetCommandFromJSONString(json_Datas);
 				switch (command) {
@@ -75,7 +89,7 @@ namespace ClientNameSpace {
 						break;
 				}
 				byteData = new byte[1024];
-				clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
+				ClientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 			} catch (ObjectDisposedException) { } catch (Exception ex) {
 				MessageBox.Show(ex.Message, "СlientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
@@ -91,8 +105,8 @@ namespace ClientNameSpace {
 				string commandToSend = Command.LOGOUT + Command.SEPARATOR;
 
 				byte[] bytes = Encoding.UTF8.GetBytes(commandToSend);
-				clientSocket.Send(bytes, 0, bytes.Length, SocketFlags.None);
-				clientSocket.Close();
+				ClientSocket.Send(bytes, 0, bytes.Length, SocketFlags.None);
+				ClientSocket.Close();
 			} catch (ObjectDisposedException) { } catch (Exception ex) {
 				MessageBox.Show(ex.Message, "ClientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
