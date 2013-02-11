@@ -1,108 +1,100 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.ComponentModel;
+using System.Data;
+using System.Drawing;
 using System.Text;
-using System.Net.Sockets;
+using System.Windows.Forms;
 using System.Net;
+using System.Net.Sockets;
 using System.Runtime.Serialization.Json;
+using GameItems;
 using System.IO;
 
 namespace ClientNameSpace {
-	public class Client {
-		private const string CLOSE = "close";
+	public partial class Client {
+		public Socket clientSocket;
+		private byte[] byteData = new byte[1024];
+		private Player mainPlayer;
+		private List<Player> allPlayers;
 
-		public delegate void ClientMessagedEventHandler(string message);
-		public event ClientMessagedEventHandler ClientMessaged;
-
-		public delegate void ClientClosedEventHandler();
-		public event ClientClosedEventHandler ClientClosed;
-
-		private Socket Sock;
-		private SocketAsyncEventArgs SockAsyncArgs;
-
-		private byte[] buff;
-
-		public Client() {
-			buff = new byte[1024];
-			Sock = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-			SockAsyncArgs = new SocketAsyncEventArgs();
-			SockAsyncArgs.Completed += SockAsyncArgs_Completed;
+		public Client() { 
+			/// Инициализировать MainForm
+			initClient();
 		}
 
-		public void ConnectAsync(string Address, int Port) {
-			SockAsyncArgs.RemoteEndPoint = new DnsEndPoint(Address, Port);
-			ConnectAsync(SockAsyncArgs);
+		public Client(Player inPlayer) {
+			/// Инициализировать MainForm
+			mainPlayer = new Player(inPlayer.Name);
+			initClient();
 		}
 
-		private void ConnectAsync(SocketAsyncEventArgs e) {
-			bool willRaiseEvent = Sock.ConnectAsync(e);
-			if (!willRaiseEvent)
-				ProcessConnect(e);
+		private void initClient() {
+			string commandToSend = Command.LIST + Command.SEPARATOR;
+			byteData = Encoding.UTF8.GetBytes(commandToSend);
+			clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+			byteData = new byte[1024];
+			clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 		}
 
-		public void SendAsync(string data) {
-			if (Sock.Connected && data.Length > 0) {
-				byte[] buff = Encoding.UTF8.GetBytes(data);
-				SocketAsyncEventArgs e = new SocketAsyncEventArgs();
-				e.SetBuffer(buff, 0, buff.Length);
-				e.Completed += SockAsyncArgs_Completed;
-				SendAsync(e);
+		private void btnSend_Click(object sender, EventArgs e) {
+			try {
+				string json = "message." + JSON.SerializePlayer(mainPlayer);
+				byte[] byteData = Encoding.UTF8.GetBytes(json);
+				clientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
+			} catch (Exception exc) {
+				MessageBox.Show("Unable to send message to the server. Error: " + exc.Message, "SGSclientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
-		private void SendAsync(SocketAsyncEventArgs e) {
-			bool willRaiseEvent = Sock.SendAsync(e);
-			if (!willRaiseEvent) {
-				ProcessSend(e);
+		private void OnSend(IAsyncResult ar) {
+			try {
+				clientSocket.EndSend(ar);
+			} catch (ObjectDisposedException) { } catch (Exception ex) {
+				MessageBox.Show(ex.Message, "SGSclientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
-		private void ReceiveAsync(SocketAsyncEventArgs e) {
-			if (Sock.ReceiveAsync(e) == false) {
-				ProcessReceive(e);
+		private void OnReceive(IAsyncResult ar) {
+			try {
+				clientSocket.EndReceive(ar);
+				string json_Datas = Encoding.UTF8.GetString(byteData);
+				string command = JSON.GetCommandFromJSONString(json_Datas);
+				switch (command) {
+					case Command.LOGIN:
+						/// Добавить в список игроков под нужным индексом
+						break;
+					case Command.LOGOUT:
+						/// назначить в игре статус проиграл
+						break;
+					case Command.MESSAGE:
+						/// назначить соответствующему пользователю соответствующие баллы
+						break;
+					case Command.LIST:
+						/// добавить остальных игроков в игру
+						break;
+				}
+				byteData = new byte[1024];
+				clientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
+			} catch (ObjectDisposedException) { } catch (Exception ex) {
+				MessageBox.Show(ex.Message, "СlientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
-		private void SockAsyncArgs_Completed(object sender, SocketAsyncEventArgs e) {
-			switch (e.LastOperation) {
-				case SocketAsyncOperation.Connect:
-					ProcessConnect(e);
-					break;
-				case SocketAsyncOperation.Receive:
-					ProcessReceive(e);
-					break;
-				case SocketAsyncOperation.Send:
-					ProcessSend(e);
-					break;
+		private void SGSClient_FormClosing(object sender, FormClosingEventArgs e) {
+			if (MessageBox.Show("Are you sure you want to leave the game?", "ClientNameSpace: " + mainPlayer.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No) {
+				e.Cancel = true;
+				return;
 			}
-		}
 
-		private void ProcessSend(SocketAsyncEventArgs e) {
-			if (e.SocketError == SocketError.Success) {
-				ReceiveAsync(SockAsyncArgs);
-			} else {
-				ClientMessaged("Dont send");
-			}
-		}
+			try {
+				string commandToSend = Command.LOGOUT + Command.SEPARATOR;
 
-		private void ProcessReceive(SocketAsyncEventArgs e) {
-			if (e.SocketError == SocketError.Success) {
-				MemoryStream stream = new MemoryStream();
-				DataContractJsonSerializer ser = new DataContractJsonSerializer(typeof(GameItems.Player));
-				stream.Write(e.Buffer, 0, e.Buffer.Length);
-				GameItems.Player player = (GameItems.Player)(ser.ReadObject(stream));
-				System.Windows.Forms.MessageBox.Show(player.Index.ToString());
-				//string str = Encoding.UTF8.GetString(e.Buffer, 0, e.BytesTransferred);
-			} else {
-				ClientMessaged("Dont recieve");
-			}
-		}
-
-		private void ProcessConnect(SocketAsyncEventArgs e) {
-			if (e.SocketError == SocketError.Success) {
-				SockAsyncArgs.SetBuffer(buff, 0, buff.Length);
-			} else {
-				ClientMessaged("Dont connect to {0}" + e.RemoteEndPoint.ToString());
+				byte[] bytes = Encoding.UTF8.GetBytes(commandToSend);
+				clientSocket.Send(bytes, 0, bytes.Length, SocketFlags.None);
+				clientSocket.Close();
+			} catch (ObjectDisposedException) { } catch (Exception ex) {
+				MessageBox.Show(ex.Message, "ClientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 	}

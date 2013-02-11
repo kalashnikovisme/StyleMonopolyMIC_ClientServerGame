@@ -43,20 +43,14 @@ namespace MIC_Monopolia {
 		private Game game;
 		private bool isGame = false;
 
-		private Client client;
-
-		//private Color[] orderColor = new Color[] { Color.Red, 
-		//	Color.Black, Color.Green, Color.Blue, Color.Yellow, Color.Brown, Color.Coral, Color.Orange, 
-		//	Color.Purple, Color.Gray 
-		//};
-
-		private Color[] orderColor = new Color[] { Color.Red, Color.Black };
+		private Color[] orderColor = new Color[] { Color.Red, 
+			Color.Black, Color.Green, Color.Blue, Color.Yellow, Color.Brown, Color.Coral, Color.Orange, 
+			Color.Purple, Color.Gray 
+		};
 
 		#region Create Field
 
 		public MainField(int playCellsCount, int playersCount) {
-			initClient();
-
 			cells = new Cell[playCellsCount];
 			namePlayersDisTextBox = new ImprovedLabel[playersCount];
 			moneyPlayersLabel = new OpacityLabel[playersCount];
@@ -78,9 +72,7 @@ namespace MIC_Monopolia {
 
 			putImageInCells();
 
-			this.Paint += MainField_Paint;
-
-			sendCreateFieldCompleted();			
+			this.Paint += MainField_Paint;			
 		}
 
 		private void MainField_Paint(object sender, PaintEventArgs e) {
@@ -371,7 +363,6 @@ namespace MIC_Monopolia {
 				game.PlayerBankKrupt += game_playerBankKrupt;
 				game.NewFormIsOpen += game_NewFormIsOpen;
 				isGame = true;
-				sendDataAboutPlayer(players[0]);
 			}
 			game.NextMove(sumPointsOfDices());
 			game.CheckCell(cells[game.PlayersPositions[game.CurrentPlayerIndex]].Task);
@@ -595,33 +586,6 @@ namespace MIC_Monopolia {
 					cells[i].BackgroundImage = global::MIC_Monopolia.Properties.Resources.it;
 				}
 			}
-		}
-
-		#endregion
-
-		#region ClientNameSpace
-
-		private void initClient() {
-			client = new Client();
-			client.ConnectAsync("127.0.0.1", 4505);
-			client.ClientMessaged += new Client.ClientMessagedEventHandler(client_ClientMessaged);
-			client.ClientClosed += new Client.ClientClosedEventHandler(client_ClientClosed);
-		}
-
-		private void client_ClientClosed() {
-			this.Close();
-		}
-
-		private void client_ClientMessaged(string message) {
-			
-		}
-
-		private void sendDataAboutPlayer(Player player) {
-			
-		}
-
-		private void sendCreateFieldCompleted() {
-			client.SendAsync("SendCreateComplete");
 		}
 
 		#endregion

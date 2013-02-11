@@ -5,35 +5,23 @@ using System.Text;
 using UsefulClasses;
 using System.Runtime.Serialization.Json;
 using System.Runtime.Serialization;
+using Newtonsoft.Json;
 
 namespace GameItems {
-	[DataContract]
+	[JsonObject(MemberSerialization.Fields)]
 	public class Player : RealObject {
-		[DataMember]
+		[JsonProperty("money")]
 		public int Money = 0;
-		[DataMember]
+		[JsonProperty("famous")]
 		public int Famous = 0;
-		[DataMember]
+		[JsonProperty("people")]
 		public int People = 0;
 		
-		private const int NOT_IN_FIELD = -1;
-		
-		private int position = NOT_IN_FIELD;
-		[DataMember]
-		public int Position {
-			get {
-				if (position == NOT_IN_FIELD) {
-					throw new Exception("Player did not make a single move");
-				}
-				return position;
-			}
-			set {
-				position = value;
-			}
-		}
+		[JsonProperty("position")]
+		public int Position = 0;
 
 		private int index = -1;
-		[DataMember]
+		[JsonProperty("index")]
 		public int Index {
 			get {
 				return index;
@@ -49,10 +37,15 @@ namespace GameItems {
 			this.Name = playerName;
 		}
 
-		public Player(int playerIndex) {
+		public Player(int playerIndex, string playerName) {
+			this.Name = playerName;
 			this.Index = playerIndex;
 		}
 
+		public Player(int playerIndex) {
+			this.Index = playerIndex;
+		}
+		[JsonProperty("lose")]
 		public bool Lose = false;
 	}
 }
