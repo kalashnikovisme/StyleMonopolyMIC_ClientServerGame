@@ -30,6 +30,7 @@ namespace GameItems {
 				if (value < 0) {
 					throw new Exception("Индекс игрока не может быть меньше нуля. Игрок - " + this.Name);
 				}
+				index = value;
 			}
 		}
 
