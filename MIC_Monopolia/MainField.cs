@@ -38,33 +38,32 @@ namespace MIC_Monopolia {
 		private OpacityLabel[] tasksLabels;
 		private OpacityLabel[] positionLabels;
 		private PerformButton[] tasksPerformButtons;
-		
-		private Player[] players;
+
+		private Player mainPlayer;
+		private List<Player> players;
 		private Game game;
 		private bool isGame = false;
 
 		private Color[] orderColor = new Color[] { Color.Red, 
 			Color.Black, Color.Green, Color.Blue, Color.Yellow, Color.Brown, Color.Coral, Color.Orange, 
-			Color.Purple, Color.Gray 
+			Color.Purple, Color.Gray
 		};
+
+		private int playersCount {
+			get {
+				return players.Count;
+			}
+		}
 
 		#region Create Field
 
-		public MainField(int playCellsCount, int playersCount) {
+		public MainField(int playCellsCount) {
+			players = new List<Player>();
+			
 			cells = new Cell[playCellsCount];
-			namePlayersDisTextBox = new ImprovedLabel[playersCount];
-			moneyPlayersLabel = new OpacityLabel[playersCount];
-			peoplePlayersLabel = new OpacityLabel[playersCount];
-			famousPlayersLabel = new OpacityLabel[playersCount];
-			chips = new Chip[DEFAULT_COUNT];
-			staticCloneChips = new Chip[DEFAULT_COUNT];
-			tasksStaticCloneChips = new Chip[DEFAULT_COUNT];
-			tasksLabels = new OpacityLabel[playersCount];
-			positionLabels = new OpacityLabel[playersCount];
 			tasksPerformButtons = new PerformButton[playersCount];
 			cubesPanel = new OpacityTableLayoutPanel();
 			taskTableLayoutPanel = new OpacityTableLayoutPanel();
-			players = new Player[playersCount];
 			InitializeComponent();
 			this.Font = new Font("PF Beausans Pro Light", 12F, FontStyle.Bold);
 
@@ -75,22 +74,29 @@ namespace MIC_Monopolia {
 			this.Paint += MainField_Paint;
 		}
 
-		private void MainField_Paint(object sender, PaintEventArgs e) {
-			//Graphics g = e.Graphics;
-			//DrawRectangle(g, 0, 0, this.Width, this.Height);
-			this.BackColor = Color.FromArgb(249, 189, 39);
+		public void AddNewPlayer(Player newPlayer) {
+			if (isGame) {
+				throw new Exception("Во время игры нельзя добавлять нового игрока. Игрок: " + newPlayer.Name + ":" + newPlayer.Index.ToString());
+			}
+			players.Add(newPlayer);
+			initPlayersField();
 		}
 
-		//private void DrawRectangle(Graphics g, int x, int y, int widht, int height) {
-		//	Rectangle rec = new Rectangle(x, y, widht, height);
-		//	if ((widht != 0) && (height != 0)) {
-		//		System.Drawing.Drawing2D.LinearGradientBrush gradient = new System.Drawing.Drawing2D.LinearGradientBrush(rec, Color.FromArgb(249, 189, 39), Color.White, System.Drawing.Drawing2D.LinearGradientMode.Vertical);
-		//		g.FillRectangle(gradient, rec);
-		//		return;
-		//	}
-		//	Brush brush = new SolidBrush(Color.FromArgb(251, 188, 59));
-		//	g.FillRectangle(brush, rec);
-		//}
+		private void initPlayersField() {
+			statisticTableLayoutPanel.Controls.Clear();
+			initializeNamePlayersDisTextBox();
+			initializePointPlayersLabel();
+			initilizeChips();
+			initializeTaskField();
+		}
+
+		public void SetMainPlayer(Player player) {
+			mainPlayer = player;
+		}
+
+		private void MainField_Paint(object sender, PaintEventArgs e) {
+			this.BackColor = Color.FromArgb(249, 189, 39);
+		}
 
 		private void createField() {
 			fieldTableLayoutPanel.ColumnStyles.Insert(0, new ColumnStyle(SizeType.Percent, 60));
@@ -107,7 +113,7 @@ namespace MIC_Monopolia {
 			controlTableLayoutPanel.RowStyles.Insert(0, new RowStyle(SizeType.Percent, 70));
 			controlTableLayoutPanel.RowStyles.Insert(1, new RowStyle(SizeType.Absolute, 150));
 
-			statisticTableLayoutPanel.RowCount = chips.Length;
+			statisticTableLayoutPanel.RowCount = DEFAULT_COUNT;
 			int chipSidePercent = PERCENT_100 / statisticTableLayoutPanel.RowCount;
 			for (int i = 0; i < statisticTableLayoutPanel.RowCount; i++) {
 				statisticTableLayoutPanel.RowStyles.Insert(i, new RowStyle(SizeType.Percent, chipSidePercent));
@@ -124,19 +130,21 @@ namespace MIC_Monopolia {
 			initializeNamePlayersDisTextBox();
 			initializePointPlayersLabel();
 			initilizeCells();
-			initilizePlayers();
 			initilizeChips();
 			initializeTaskField();
 		}
 
 		private void initializeTaskField() {
+			tasksLabels = new OpacityLabel[playersCount];
+			positionLabels = new OpacityLabel[playersCount];
+			tasksPerformButtons = new PerformButton[playersCount];
+
 			taskTableLayoutPanel = new OpacityTableLayoutPanel() {
 				Dock = DockStyle.Fill
 			};
 			spaceTableLayoutPanel.Controls.Add(taskTableLayoutPanel, 1, 1);
 			spaceTableLayoutPanel.SetColumnSpan(taskTableLayoutPanel, calculateFieldSide() - 2);
 			spaceTableLayoutPanel.SetRowSpan(taskTableLayoutPanel, calculateFieldSide() - 2);
-			//spaceTableLayoutPanel.CellBorderStyle = TableLayoutPanelCellBorderStyle.InsetDouble;
 
 			taskTableLayoutPanel.ColumnCount = 3;
 			taskTableLayoutPanel.BackgroundImage = global::MIC_Monopolia.Properties.Resources.wall;
@@ -204,6 +212,10 @@ namespace MIC_Monopolia {
 		}
 
 		private void initializePointPlayersLabel() {
+			moneyPlayersLabel = new OpacityLabel[playersCount];
+			peoplePlayersLabel = new OpacityLabel[playersCount];
+			famousPlayersLabel = new OpacityLabel[playersCount];
+
 			for (int i = 0; i < moneyPlayersLabel.Length; i++) {
 				moneyPlayersLabel[i] = new OpacityLabel() {
 					Dock = DockStyle.Fill,
@@ -232,6 +244,7 @@ namespace MIC_Monopolia {
 		}
 
 		private void initializeNamePlayersDisTextBox() {
+			namePlayersDisTextBox = new ImprovedLabel[playersCount];
 			for (int i = 0; i < namePlayersDisTextBox.Length; i++) {
 				namePlayersDisTextBox[i] = new ImprovedLabel() {
 					Text = "Введите название команды",
@@ -271,16 +284,14 @@ namespace MIC_Monopolia {
 			}
 		}
 
-		private void initilizePlayers() {
-			for (int i = 0; i < players.Length; i++) {
-				players[i] = new Player(namePlayersDisTextBox[i].Text);
-			}
-		}
-
 		/// <summary>
 		/// Chips count is always 10. It need to save size of chip. All other chips are invisible.
 		/// </summary>
 		private void initilizeChips() {
+			chips = new Chip[DEFAULT_COUNT];
+			staticCloneChips = new Chip[DEFAULT_COUNT];
+			tasksStaticCloneChips = new Chip[DEFAULT_COUNT];
+
 			for (int i = 0; i < DEFAULT_COUNT; i++) {
 				chips[i] = new Chip() {
 					Image = Image.FromFile(IMAGE_CHIPS_PATH + i.ToString() + ".png")
@@ -292,7 +303,7 @@ namespace MIC_Monopolia {
 					Image = Image.FromFile(IMAGE_CHIPS_PATH + i.ToString() + ".png")
 				};
 			}
-			for (int i = players.Length; i < DEFAULT_COUNT; i++) {
+			for (int i = players.Count; i < DEFAULT_COUNT; i++) {
 				chips[i].Visible = false;
 				staticCloneChips[i].Visible = false;
 				tasksStaticCloneChips[i].Visible = false;
@@ -358,7 +369,7 @@ namespace MIC_Monopolia {
 				return;
 			}
 			if (isGame == false) {  
-				game = new Game(players, cells.Length);
+				game = new Game(players.ToArray(), cells.Length);
 				game.ChanceFormClosed += game_ChanceFormClosed;
 				game.PlayerBankKrupt += game_playerBankKrupt;
 				game.NewFormIsOpen += game_NewFormIsOpen;
@@ -398,7 +409,7 @@ namespace MIC_Monopolia {
 			cells[currentPosition].Controls.Add(chips[currentPlayerIndex]);
 			tasksLabels[currentPlayerIndex].Text = cells[currentPosition].Task;
 			positionLabels[currentPlayerIndex].Text = (currentPosition + 1).ToString();
-			for (int i = 0; i < players.Length; i++) {
+			for (int i = 0; i < players.Count; i++) {
 				moneyPlayersLabel[i].Text = game.Money[i].ToString();
 				peoplePlayersLabel[i].Text = game.People[i].ToString();
 				famousPlayersLabel[i].Text = game.Famous[i].ToString();	
@@ -422,7 +433,7 @@ namespace MIC_Monopolia {
 		}
 		
 		private void adjustSizeOfChips(int player, int position) {
-			for (int i = 0; i < players.Length; i++) {
+			for (int i = 0; i < players.Count; i++) {
 				if (game.GetSamePositionsOfPlayer(i).Count == 0) {
 					chips[i].Dock = DockStyle.Fill;
 				}

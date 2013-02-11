@@ -18,15 +18,15 @@ namespace ClientNameSpace {
 		private byte[] byteData = new byte[1024];
 		private Player mainPlayer;
 		private List<Player> allPlayers;
-
+		private MainField main;
 		public Client() { 
-			/// Инициализировать MainForm
 			mainPlayer = new Player();
+			main = new MainField(40);			
 		}
 
 		public Client(Player inPlayer) {
-			/// Инициализировать MainForm
 			mainPlayer = new Player(inPlayer.Name);
+			main = new MainField(40);
 		}
 
 		public string PlayerName {
@@ -45,9 +45,7 @@ namespace ClientNameSpace {
 			byteData = new byte[1024];
 			ClientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 
-			allPlayers = new List<Player>();
-
-			MainField main = new MainField(40, allPlayers.Count + 1);
+			allPlayers = new List<Player>();	
 			main.ShowDialog();
 		}
 
@@ -65,7 +63,7 @@ namespace ClientNameSpace {
 			try {
 				ClientSocket.EndSend(ar);
 			} catch (ObjectDisposedException) { } catch (Exception ex) {
-				MessageBox.Show(ex.Message, "SGSclientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
+				MessageBox.Show(ex.Message, "ClientTCP: " + mainPlayer.Name, MessageBoxButtons.OK, MessageBoxIcon.Error);
 			}
 		}
 
@@ -74,9 +72,12 @@ namespace ClientNameSpace {
 				ClientSocket.EndReceive(ar);
 				string json_Datas = Encoding.UTF8.GetString(byteData);
 				string command = JSON.GetCommandFromJSONString(json_Datas);
+				Player newPlayer = null;
 				switch (command) {
 					case Command.LOGIN:
-						/// Добавить в список игроков под нужным индексом
+						int startIndex = json_Datas.IndexOf(Command.SEPARATOR) + 1;
+						newPlayer = JSON.DeserializeData(json_Datas.Substring(startIndex, json_Datas.LastIndexOf('}') + 1 - startIndex));
+						main.SetMainPlayer(newPlayer);
 						break;
 					case Command.LOGOUT:
 						/// назначить в игре статус проиграл
