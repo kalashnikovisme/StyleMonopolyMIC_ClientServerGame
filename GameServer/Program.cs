@@ -11,7 +11,7 @@ namespace Server {
 		static void Main() {
 			Application.EnableVisualStyles();
 			Application.SetCompatibleTextRenderingDefault(false);
-			Application.Run(new SGSserverForm());
+			Application.Run(new ServerForm());
 		}
 	}
 }

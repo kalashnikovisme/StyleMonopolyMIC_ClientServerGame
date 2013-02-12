@@ -84,6 +84,8 @@ namespace MIC_Monopolia {
 
 		private void initPlayersField() {
 			statisticTableLayoutPanel.Controls.Clear();
+			taskTableLayoutPanel.Controls.Clear();
+			spaceTableLayoutPanel.Controls.Remove(taskTableLayoutPanel);
 			initializeNamePlayersDisTextBox();
 			initializePointPlayersLabel();
 			initilizeChips();
@@ -92,6 +94,13 @@ namespace MIC_Monopolia {
 
 		public void SetMainPlayer(Player player) {
 			mainPlayer = player;
+			AddNewPlayer(mainPlayer);
+			namePlayersDisTextBox[0].Text = mainPlayer.Name;
+		}
+
+		public void SetOtherPlayers(List<Player> otherPlayers) {
+			players = otherPlayers;
+			viewDatas();
 		}
 
 		private void MainField_Paint(object sender, PaintEventArgs e) {
@@ -364,6 +373,9 @@ namespace MIC_Monopolia {
 			return sum;
 		}
 
+		public delegate void PlayerChangedEventHandler(Player changedPlayer);
+		public event PlayerChangedEventHandler PlayerChanged;
+
 		private void play() {
 			if (beginPlayCondition() == false) {
 				return;
@@ -378,6 +390,7 @@ namespace MIC_Monopolia {
 			game.NextMove(sumPointsOfDices());
 			game.CheckCell(cells[game.PlayersPositions[game.CurrentPlayerIndex]].Task);
 			viewDatas();
+			PlayerChanged(mainPlayer);
 			distinguishCells();
 		}
 

@@ -22,11 +22,19 @@ namespace ClientNameSpace {
 		public Client() { 
 			mainPlayer = new Player();
 			main = new MainField(40);			
+			main.PlayerChanged += main_PlayerChanged;
 		}
 
 		public Client(Player inPlayer) {
 			mainPlayer = new Player(inPlayer.Name);
 			main = new MainField(40);
+			main.PlayerChanged += main_PlayerChanged;
+		}
+
+		private void main_PlayerChanged(Player changedPlayer) {
+			string jsonToSend = Command.MESSAGE + Command.SEPARATOR + JSON.SerializePlayer(changedPlayer);
+			byteData = Encoding.UTF8.GetBytes(jsonToSend);
+			ClientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);			
 		}
 
 		public string PlayerName {
@@ -73,21 +81,35 @@ namespace ClientNameSpace {
 				string json_Datas = Encoding.UTF8.GetString(byteData);
 				string command = JSON.GetCommandFromJSONString(json_Datas);
 				Player newPlayer = null;
+				int startIndex = json_Datas.IndexOf(Command.SEPARATOR) + 1;
+				string jsonToSend = "";
 				switch (command) {
 					case Command.LOGIN:
-						int startIndex = json_Datas.IndexOf(Command.SEPARATOR) + 1;
 						newPlayer = JSON.DeserializeData(json_Datas.Substring(startIndex, json_Datas.LastIndexOf('}') + 1 - startIndex));
-						main.SetMainPlayer(newPlayer);
+						if (main.InvokeRequired) {
+							setMainPlayerDelegate setMainPlayer = new setMainPlayerDelegate(setMainPlayerCallBack);
+							main.Invoke(setMainPlayer, newPlayer);
+						} else {
+							main.SetMainPlayer(newPlayer);
+						}
+						jsonToSend = Command.LIST + Command.SEPARATOR;
 						break;
 					case Command.LOGOUT:
 						/// назначить в игре статус проиграл
 						break;
 					case Command.MESSAGE:
-						/// назначить соответствующему пользователю соответствующие баллы
+						jsonToSend = Command.MESSAGE + Command.SEPARATOR + JSON.SerializePlayer(mainPlayer);
 						break;
 					case Command.LIST:
-						/// добавить остальных игроков в игру
+						//Newtonsoft.Json.Linq.JObject jObj = Newtonsoft.Json.Linq.JObject.Parse(json_Datas.Substring(startIndex, json_Datas.LastIndexOf('}') + 1 - startIndex));
+						//Player[] pl = Newtonsoft.Json.JsonConvert.DeserializeObject<Player[]>(jObj[0].ToString());
+						//allPlayers.Clear();
+						//allPlayers.AddRange(pl);
 						break;
+				}
+				if (command != Command.LIST) {
+					byteData = Encoding.UTF8.GetBytes(jsonToSend);
+					ClientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
 				}
 				byteData = new byte[1024];
 				ClientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
@@ -96,15 +118,18 @@ namespace ClientNameSpace {
 			}
 		}
 
+		private delegate void setMainPlayerDelegate(Player player);
+		private void setMainPlayerCallBack(Player player) {
+			main.SetMainPlayer(player);
+		}
+
 		private void SGSClient_FormClosing(object sender, FormClosingEventArgs e) {
 			if (MessageBox.Show("Are you sure you want to leave the game?", "ClientNameSpace: " + mainPlayer.Name, MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation) == DialogResult.No) {
 				e.Cancel = true;
 				return;
 			}
-
 			try {
 				string commandToSend = Command.LOGOUT + Command.SEPARATOR;
-
 				byte[] bytes = Encoding.UTF8.GetBytes(commandToSend);
 				ClientSocket.Send(bytes, 0, bytes.Length, SocketFlags.None);
 				ClientSocket.Close();
