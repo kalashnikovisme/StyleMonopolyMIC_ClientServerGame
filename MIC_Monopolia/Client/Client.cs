@@ -47,7 +47,7 @@ namespace ClientNameSpace {
 		}
 
 		public void InitConnection() {
-			string commandToSend = Command.LIST + Command.SEPARATOR;
+			string commandToSend = Command.MESSAGE + Command.SEPARATOR;
 			byteData = Encoding.UTF8.GetBytes(commandToSend);
 			ClientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
 			byteData = new byte[1024];
@@ -92,7 +92,7 @@ namespace ClientNameSpace {
 						} else {
 							main.SetMainPlayer(newPlayer);
 						}
-						jsonToSend = Command.LIST + Command.SEPARATOR;
+						jsonToSend = Command.MESSAGE + Command.SEPARATOR;
 						break;
 					case Command.LOGOUT:
 						/// назначить в игре статус проиграл
@@ -100,17 +100,9 @@ namespace ClientNameSpace {
 					case Command.MESSAGE:
 						jsonToSend = Command.MESSAGE + Command.SEPARATOR + JSON.SerializePlayer(mainPlayer);
 						break;
-					case Command.LIST:
-						//Newtonsoft.Json.Linq.JObject jObj = Newtonsoft.Json.Linq.JObject.Parse(json_Datas.Substring(startIndex, json_Datas.LastIndexOf('}') + 1 - startIndex));
-						//Player[] pl = Newtonsoft.Json.JsonConvert.DeserializeObject<Player[]>(jObj[0].ToString());
-						//allPlayers.Clear();
-						//allPlayers.AddRange(pl);
-						break;
 				}
-				if (command != Command.LIST) {
-					byteData = Encoding.UTF8.GetBytes(jsonToSend);
-					ClientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
-				}
+				byteData = Encoding.UTF8.GetBytes(jsonToSend);
+				ClientSocket.BeginSend(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnSend), null);
 				byteData = new byte[1024];
 				ClientSocket.BeginReceive(byteData, 0, byteData.Length, SocketFlags.None, new AsyncCallback(OnReceive), null);
 			} catch (ObjectDisposedException) { } catch (Exception ex) {

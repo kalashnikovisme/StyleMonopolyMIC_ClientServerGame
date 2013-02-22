@@ -380,7 +380,7 @@ namespace MIC_Monopolia {
 			if (beginPlayCondition() == false) {
 				return;
 			}
-			if (isGame == false) {  
+			if (isGame == false) {
 				game = new Game(players.ToArray(), cells.Length);
 				game.ChanceFormClosed += game_ChanceFormClosed;
 				game.PlayerBankKrupt += game_playerBankKrupt;
